@@ -41,6 +41,7 @@
 		<cfargument name="template" type="string" required="false" default="" hint="A specific template to render">
 		<cfargument name="layout" type="any" required="false" default="" hint="The layout to wrap the content in">
 		<cfargument name="cache" type="any" required="false" default="" hint="Minutes to cache the content for">
+		<cfargument name="returnAs" type="string" required="false" default="" hint="Set to `string` to return the result to the controller instead of sending it to the browser immediately">
 		<cfargument name="$showDebugInformation" type="any" required="false" default="#application.wheels.showDebugInformation#">
 		<cfscript>
 			$checkApplicationLayoutStructExists();
@@ -48,6 +49,7 @@
 			if (not Len(arguments.layout)) {
 				// no layout was specified so lets see if we have called layout()
 				if (StructKeyExists(application, "layoutFiles")) {
+					
 					if (isAjax() and StructKeyExists(application.layoutFiles[variables.wheels.name], "ajax")) {
 					
 						arguments.$showDebugInformation = false;
@@ -59,15 +61,15 @@
 						
 					} else {
 					
-						arguments.layout = application.wheels.renderPage.layout;
+						arguments.layout = application.wheels.functions.renderPage.layout;
 					}
 				} else {
 				
-					arguments.layout = application.wheels.renderPage.layout;
+					arguments.layout = application.wheels.functions.renderPage.layout;
 				}			
 			}
 			
-			core.renderPage(arguments.controller, arguments.action, arguments.template, arguments.layout, arguments.cache, arguments.$showDebugInformation);
+			core.renderPage(arguments.controller, arguments.action, arguments.template, arguments.layout, arguments.cache, arguments.returnAs, arguments.$showDebugInformation);
 		</cfscript>
 	</cffunction>
 	
