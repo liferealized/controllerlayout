@@ -1,18 +1,23 @@
 <cfcomponent>
 
-	<cffunction name="init" access="public">
-		<cfset this.version = "0.9.4">
+	<cffunction name="init" access="public" output="false">
+		<cfscript>
+			if (StructKeyExists(application, "layoutFiles"))
+				StructDelete(application, "layoutFiles");
+			
+			this.version = "1.0";
+		</cfscript>
 		<cfreturn this />
 	</cffunction>
 	
-	<cffunction name="layout">
+	<cffunction name="layout" output="false" access="public" returntype="void" mixin="controller">
 		<cfargument name="layout" required="true" type="string" />
 		<cfscript>
 			layouts(arguments.layout);
 		</cfscript>
 	</cffunction>
-
-	<cffunction name="layouts">
+	
+	<cffunction name="layouts" output="false" access="public" returntype="void" mixin="controller">
 		<cfargument name="layout" required="true" type="string" />
 		<cfscript>
 			$checkApplicationLayoutStructExists();
@@ -20,14 +25,7 @@
 		</cfscript>
 	</cffunction>
 
-	<cffunction name="ajaxLayout">
-		<cfargument name="layout" required="true" type="string" />
-		<cfscript>
-			ajaxLayouts(arguments.layout);
-		</cfscript>
-	</cffunction>
-
-	<cffunction name="ajaxLayouts">
+	<cffunction name="ajaxLayouts" output="false" access="public" returntype="void" mixin="controller">
 		<cfargument name="layout" required="true" type="string" />
 		<cfscript>
 			$checkApplicationLayoutStructExists();
@@ -35,7 +33,7 @@
 		</cfscript>
 	</cffunction>
 	
-	<cffunction name="renderPage" returntype="void" access="public" output="false" hint="Renders content to the browser by including the view page for the specified controller and action.">
+	<cffunction name="renderPage" returntype="void" access="public" output="false" mixin="controller">
 		<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="Controller to include the view page for">
 		<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="Action to include the view page for">
 		<cfargument name="template" type="string" required="false" default="" hint="A specific template to render">
@@ -73,7 +71,7 @@
 		</cfscript>
 	</cffunction>
 	
-	<cffunction name="$checkApplicationLayoutStructExists">
+	<cffunction name="$checkApplicationLayoutStructExists" output="false" access="public" returntype="void" mixin="controller">
 		<cfscript>
 			if (not StructKeyExists(application, "layoutFiles"))
 				application.layoutFiles = {};
